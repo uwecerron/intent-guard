@@ -89,7 +89,7 @@ The full design, threat model, and reference implementations.
 
 ## Why this matters
 
-Most DeFi users turned to crypto because the existing financial system already failed them. When DeFi gets drained, they lose their savings, not the VCs.
+Most DeFi users turned to crypto because the existing financial system already failed them. When DeFi gets drained, they lose their savings, and the funds, market makers, and integrated protocols downstream lose with them.
 
 We built a system for the debanked and wired it to a signing UX that fails the moment a recruiter sends a Calendly link.
 
