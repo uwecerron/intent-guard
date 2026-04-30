@@ -171,6 +171,8 @@ The signer CLI sketch is here:
 clients/signer-cli.ts
 ```
 
+For higher-value protocols, add a separate attester device or locked-down attester app. The attester renders the same intent on a device that is not the signer's laptop and produces a co-signature. See `attester/`.
+
 ### 6. Queue
 
 Once the proposal has enough fresh signatures, it enters the public queue.

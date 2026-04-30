@@ -137,7 +137,35 @@ Intentguard is only protective if:
 - adapter changes use longer delays,
 - emergency authorities are scoped and cannot bypass the slow vault.
 
-## 10. Founder summary
+## 10. Attester extension
+
+Intentguard can require a second approval class: attester approvals.
+
+An attester is a separate device or locked-down app that renders canonical intent on its own screen and signs only after physical confirmation.
+
+The guard may require:
+
+```text
+M signer approvals
+AND
+M_attester attester approvals
+```
+
+An attester approval binds:
+
+- the same `intentHash`,
+- the same calldata or instruction hash,
+- the same vault,
+- the same nonce,
+- the schema version,
+- the renderer hash,
+- the firmware or app hash,
+- the display digest,
+- freshness and expiry.
+
+This reduces dependence on the signer's laptop or browser for intent rendering. See `attester/spec/ATTESTER_SPEC.md`.
+
+## 11. Founder summary
 
 Intentguard turns "trust our multisig" into "our multisig can only execute fresh, explicit, reviewable, vetoable actions."
 

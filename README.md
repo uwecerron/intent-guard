@@ -36,6 +36,7 @@ The founder-level takeaway: intentguard turns "trust our multisig" into "our mul
 - `solana/programs/intentguard/src/lib.rs`: Anchor-style Solana program scaffold.
 - `signer-cli/src/intent.ts`: TypeScript helpers for intent and attestation hashes.
 - `docs/HOWTO.md`: step-by-step tutorial for protocol teams and councils.
+- `attester/`: protocol-neutral attester design for rendering intent on a separate device.
 
 ## One-sentence description
 
@@ -71,6 +72,28 @@ Start with [`docs/HOWTO.md`](docs/HOWTO.md). It walks through the operational li
 | Oracle trust | A stale, thin, attacker-controlled, or governance-selected feed can make false claims pass. | Use feed allowlists, staleness checks, confidence checks, liquidity floors, capped bootstrap limits, multi-oracle adapters for high-value assets, and longer delays for feed changes. Do not let the same proposal both add a feed and use it for major borrowing power. |
 | Veto liveness | If `K` is too low, governance can be griefed. If `K` is too high, honest signers may fail to cancel during an incident. | Set `K` per vault, run cancellation drills, publish a signer availability rota, require cancellation reasons, and use separate slow and fast vaults for different authority levels. |
 | Queue not monitored | A 24-hour delay only helps if people or bots notice the queued proposal. | Emit indexed events, run independent monitors, alert signers out-of-band, mirror proposals to public dashboards, and require every queued action to be announced in the expected council channel. |
+
+## Recommended defenses by attack path
+
+| Attack path | What can go wrong | What intentguard does | What else to add |
+| --- | --- | --- | --- |
+| Drift-style social engineering | Signers are cultivated over time and tricked into approving admin or collateral changes that look routine. | Binds signatures to typed intent, rejects stale approvals, queues actions publicly, enables veto, and checks oracle-bound claims. | Dedicated signer devices, attester co-signatures, mandatory out-of-band council confirmation, proposal announcements, signer drills, and strict address books. |
+| Durable nonce or long-lived pre-signing | Valid signatures are collected days or months before execution and submitted later. | Requires fresh attestations at queue time and proposal expiry. | Ban informal pre-signing, monitor for durable-nonce usage, require fresh proposal IDs, and alert when old proposal material is reused. |
+| Compromised signer laptop | Malware or a malicious frontend lies about what the signer is approving. | The on-chain adapter recomputes the intent from the real call, so mismatched calldata fails. | Use the attester design in `attester/`, separate signer and work machines, hardware wallets, locked-down browser profiles, and device hygiene checks. |
+| RPC compromise | A bad RPC lies about simulation, state, labels, oracle values, or whether a proposal is queued. | Reduces trust in RPC-rendered calldata by verifying the real call on-chain at queue and execution. | RPC quorum reads, multi-provider simulation, local or self-hosted nodes for signing, signed address books, independent queue monitors, and circuit breakers. |
+| Fake oracle or feed switch | Governance points an action at a new or attacker-controlled feed, then uses that feed for borrowing power. | Adapters can require allowlisted feeds, staleness checks, tolerance checks, and exposure caps. | Separate feed-registration actions from feed-use actions, longer delays for feed changes, multi-oracle adapters, liquidity floors, and bootstrap caps. |
+| Bridge or verifier compromise | A verifier, RPC, or cross-chain message path reports false source-chain state. | Not solved by signer intent alone. Intentguard can guard verifier config changes, but not prove remote state by itself. | Multi-verifier bridge settings, RPC quorum reads, source-chain proof verification, message rate limits, withdrawal caps, and emergency circuit breakers. |
+| Malicious or rushed upgrade | A signer approves an implementation address without verifying code. | Intent can bind target, implementation, calldata hash, nonce, and expected code hash if the adapter supports it. | Reproducible builds, signed artifacts, independent bytecode verification, upgrade simulations, staged rollout, and longer cool-off for upgrades. |
+
+Short version: intentguard is strongest when the lie is about what the transaction does. For lies about external context, like RPC state, bridge state, or social pressure, pair it with independent verification, monitoring, and an attester.
+
+## The next missing primitive: attester
+
+The biggest remaining weakness is the rendering path. If the council member's laptop is compromised, it can still lie about what the typed intent says before the signer approves it.
+
+The fix is a separate attester: a small, protocol-neutral device or locked-down app with its own key and screen. It receives canonical intent bytes, renders them with an audited schema library, requires physical confirmation, and produces a co-signature over the exact rendered intent.
+
+See [`attester/`](attester/) for the draft spec.
 
 ## EVM integration
 
