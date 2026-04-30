@@ -45,6 +45,33 @@ Intentguard is an on-chain guardrail that makes every dangerous protocol action 
 
 Start with [`docs/HOWTO.md`](docs/HOWTO.md). It walks through the operational lifecycle: choosing protected actions, defining schemas, writing adapters, configuring a vault, collecting fresh signer attestations, queueing, monitoring, vetoing, and executing on EVM or Solana.
 
+## What it mitigates and what it does not
+
+| Risk | Mitigated by intentguard? | How |
+| --- | --- | --- |
+| Stale pre-signed admin transactions | Yes | Signatures must be fresh when the proposal enters the queue. |
+| Misleading signer UI or blind signing | Yes | Signers approve a typed intent hash, and the guard checks the real call matches it. |
+| Admin transfer to an unexpected address | Yes, if guarded | The adapter must decode the new admin and bind it into the signed intent. |
+| Unsafe collateral listing | Yes, if guarded | The adapter binds token, feed, claimed value, caps, and oracle/risk checks. |
+| Treasury withdrawal to a wrong recipient | Yes, if guarded | Recipient, asset, amount, and reason can be included in the typed intent. |
+| Oracle/feed switch to attacker-controlled feed | Partly | Feed allowlists and slower adapter/feed changes are required. |
+| A rushed malicious proposal | Partly | Cool-off and veto give honest signers time to cancel. |
+| Compromised signer laptop | Partly | The chain does not trust the laptop's display, but the signer key can still approve fresh bad intent if the human is fooled. |
+| Smart-contract bugs in the guarded protocol | No | Intentguard controls privileged actions, not protocol business logic. |
+| Total signer collusion | No | If enough signers knowingly approve and no veto happens, no multisig guard can save the protocol. |
+| Cross-chain verifier/RPC compromise | No, not by itself | Bridges need separate multi-verifier, RPC quorum, proof, and circuit-breaker controls. |
+
+## Known failure modes and fixes
+
+| Failure mode | Why it matters | Prevention or fix |
+| --- | --- | --- |
+| Direct bypass | If the Safe/admin key can still call the protocol directly, intentguard is only a dashboard. | Transfer guarded ownership to the module/PDA, install a Safe Guard that blocks covered direct calls, or update protected contracts so guarded functions only accept calls from intentguard. Test that direct admin calls revert. |
+| Bad adapters | If an adapter misses a field or decodes calldata incorrectly, signers approve an incomplete intent. | Write one adapter per action kind, keep schemas explicit, add unit and fuzz tests for every selector/instruction, include all risk-relevant fields, and require independent review before allowlisting adapters. |
+| Generic adapters | An adapter that accepts arbitrary calldata recreates blind signing under a new name. | Fail closed for unknown selectors, unknown targets, unknown accounts, unknown feeds, and unexpected calldata length. Do not allow "execute arbitrary bytes" as a guarded action. |
+| Oracle trust | A stale, thin, attacker-controlled, or governance-selected feed can make false claims pass. | Use feed allowlists, staleness checks, confidence checks, liquidity floors, capped bootstrap limits, multi-oracle adapters for high-value assets, and longer delays for feed changes. Do not let the same proposal both add a feed and use it for major borrowing power. |
+| Veto liveness | If `K` is too low, governance can be griefed. If `K` is too high, honest signers may fail to cancel during an incident. | Set `K` per vault, run cancellation drills, publish a signer availability rota, require cancellation reasons, and use separate slow and fast vaults for different authority levels. |
+| Queue not monitored | A 24-hour delay only helps if people or bots notice the queued proposal. | Emit indexed events, run independent monitors, alert signers out-of-band, mirror proposals to public dashboards, and require every queued action to be announced in the expected council channel. |
+
 ## EVM integration
 
 1. Deploy `IntentGuardModule`.

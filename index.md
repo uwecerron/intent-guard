@@ -1,14 +1,9 @@
 ---
-layout: default
 title: intentguard
 description: A primitive for closing the web2 attack vector in DeFi. Solana and EVM. Open source.
----
-
-# intentguard
-
-**A primitive for closing the web2 attack vector in DeFi.**
-Solana and EVM. Open source. CC BY 4.0 paper, MIT code.
-
+hero_label: A primitive
+hero_title: Closing the web2 attack vector in DeFi.
+hero_subtitle: A small on-chain gatekeeper for privileged DeFi actions on Solana and EVM. Built in response to the half-billion dollars stolen from DeFi users at Drift and Kelp in April 2026.
 ---
 
 ## The problem
@@ -21,31 +16,27 @@ The system performed perfectly. The attackers won anyway.
 
 That class of failure is what this primitive addresses.
 
----
-
 ## What intentguard does
 
 Intentguard is a small on-chain gatekeeper that sits between a council or multisig and any privileged protocol action: admin transfers, upgrades, collateral whitelists, treasury withdrawals.
 
-It enforces five invariants before execution:
+It enforces five invariants before execution.
 
 1. **Intent binding.** Each privileged action carries a signed, machine-verifiable intent statement. The on-chain guard recomputes the actual call's intent and rejects the action if it does not match what the signers approved.
 2. **Freshness window.** Signatures must be fresh when the proposal is queued (default 10 minutes). This kills the durable-nonce abuse that hit Drift.
 3. **Cool-off and veto.** A 24-hour public window during which any K-of-N signers can cancel.
-4. **Oracle-bound claims.** Oracle-dependent fields (such as a token's fair value) are checked against live, allowlisted feeds at execute time.
+4. **Oracle-bound claims.** Oracle-dependent fields, such as a token's fair value, are checked against live, allowlisted feeds at execute time.
 5. **Action whitelist.** Only registered action kinds with deterministic adapters can be queued. Unknown actions fail closed.
 
 A six-month patient social engineering attack collapses into a 24-hour public confrontation. Honest signers, given visibility and time, almost always win that confrontation.
 
----
-
 ## Read
 
-- **[Whitepaper](intentguard.html):** the full design, threat model, and reference implementations.
-- **[How to use it](docs/HOWTO.html):** step-by-step for protocol teams and councils.
-- **Source code:** [Solana Anchor program](https://github.com/) and [EVM Safe module](https://github.com/), plus a signer CLI.
+The full design, threat model, and reference implementations.
 
----
+- [Whitepaper](intentguard.html)
+- [How to use it](docs/HOWTO.html)
+- [Source code on GitHub](https://github.com/uwecerron/intent-guard)
 
 ## Why this matters
 
@@ -53,19 +44,10 @@ Most DeFi users turned to crypto because the existing financial system already f
 
 We built a system for the debanked and wired it to a signing UX that fails the moment a recruiter sends a Calendly link.
 
-This is one piece of a fix. It is small, on-chain, MIT-licensed, and ready for review.
-
----
+This is one piece of a fix.
 
 ## Status
 
-Reference design and reference implementations. Unaudited. Open for review, forks, and contributions.
+Reference design and reference implementations. Unaudited. Open for review, forks, and audits.
 
 If you deploy intentguard, fork it, or audit it, get in touch. If you find a flaw in the design, get in touch faster.
-
-## Author
-
-Uwe Cerron
-[tradersguild.global](https://www.tradersguild.global/) · [X / @traders_guild](https://x.com/traders_guild)
-
-The whitepaper is © 2026 Uwe Cerron, released under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The reference implementations are MIT-licensed.
