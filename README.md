@@ -37,6 +37,7 @@ The founder-level takeaway: intentguard turns "trust our multisig" into "our mul
 - `signer-cli/src/intent.ts`: TypeScript helpers for intent and attestation hashes.
 - `docs/HOWTO.md`: step-by-step tutorial for protocol teams and councils.
 - `attester/`: protocol-neutral attester design for rendering intent on a separate device.
+- `attester/sdk/`: developer SDK for trying attester flows with a software emulator.
 
 ## One-sentence description
 
