@@ -1,4 +1,4 @@
-# intentguard — Specification
+# intentguard - Specification
 
 Version: 0.1 draft
 Status: reference design open for review

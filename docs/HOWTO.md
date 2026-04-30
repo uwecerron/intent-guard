@@ -35,6 +35,33 @@ Start with actions where one bad transaction can damage users:
 
 Do not start with every function. Start with the functions that move power.
 
+## How realistic is integration?
+
+For most EVM protocols, this is realistic as a Safe module or guarded-owner pattern. The hard work is not deploying the module. The hard work is removing direct admin bypass and writing adapters for each sensitive action.
+
+For most Solana protocols, this is realistic when admin authority is already separated into clear instructions or PDAs. It is harder when admin authority is spread across many programs, when instructions have complex account-dependent effects, or when the protocol relies on fast manual intervention.
+
+Rough adoption estimates:
+
+- **Prototype:** 1 to 2 weeks for a focused EVM integration, 2 to 4 weeks for Solana.
+- **Production candidate:** 4 to 8 weeks for EVM, 6 to 12 weeks for Solana.
+- **Mainnet-ready:** only after protocol-specific adapters, monitoring, incident drills, and independent review.
+
+Good first integrations:
+
+- treasury withdrawal,
+- collateral cap change,
+- oracle feed change,
+- pause/unpause,
+- admin transfer.
+
+Harder integrations:
+
+- arbitrary governance payloads,
+- cross-chain messages,
+- upgrades with many dependent contracts,
+- actions whose effect depends heavily on mutable external state.
+
 ## Roles
 
 - **Protocol developer:** writes adapters for the protocol's real calls.
