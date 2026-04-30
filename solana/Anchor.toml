@@ -1,0 +1,13 @@
+[features]
+seeds = false
+skip-lint = false
+
+[programs.localnet]
+intentguard = "Fg6PaFpoGXkYsidMpWxTWqkqeY5VQwB7HyRbF3HsWJk"
+
+[provider]
+cluster = "Localnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "echo \"Add protocol-specific Anchor tests before deployment\""

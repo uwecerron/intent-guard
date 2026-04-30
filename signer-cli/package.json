@@ -1,0 +1,17 @@
+{
+  "name": "intentguard-signer-cli",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "viem": "^2.21.22"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}
