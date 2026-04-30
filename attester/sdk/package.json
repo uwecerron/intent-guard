@@ -10,14 +10,14 @@
     ".": "./dist/index.js"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "npm --prefix ../renderer run build && tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "example": "tsx examples/basic.ts"
   },
   "dependencies": {
     "@intentguard/attester-renderer": "file:../renderer",
     "@noble/curves": "^1.6.0",
-    "@noble/hashes": "^1.4.0"
+    "@noble/hashes": "^1.8.0"
   },
   "devDependencies": {
     "@types/node": "^20.12.0",

@@ -75,7 +75,8 @@ Click "Replay the Drift attack" above. The screen shows what a Drift Council mem
 ## Read
 
 - [Whitepaper](intentguard.html)
-- [Attester specification](attester/SPEC.md)
+- [Attester specification](attester/SPEC.html)
+- [How to use it](docs/HOWTO.html)
 - [Source code on GitHub](https://github.com/uwecerron/intent-guard)
 
 <style>

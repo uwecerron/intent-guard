@@ -7,13 +7,15 @@
 title: intentguard
 description: A primitive for closing the web2 attack vector in DeFi. Solana and EVM. Open source.
 
-# Leave blank for auto-detection on GitHub Pages.
-url: ""
-baseurl: ""
+# Canonical URL. Set explicitly so jekyll-seo-tag emits absolute URLs in
+# canonical and Open Graph tags (search engines need absolute URLs).
+url: "https://uwecerron.github.io"
+baseurl: "/intent-guard"
 
 plugins:
   - jekyll-relative-links
   - jekyll-seo-tag
+  - jekyll-sitemap
 
 relative_links:
   enabled: true

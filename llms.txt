@@ -1,0 +1,40 @@
+# intentguard
+
+> An open primitive for closing the web2 attack vector in DeFi.
+> Solana and EVM. MIT-licensed code, CC BY 4.0 whitepaper.
+> Built in response to the half-billion dollars stolen from DeFi users
+> at Drift and Kelp in April 2026 via social-engineered, durable-nonce-abused
+> pre-signing of admin transactions whose practical effect signers never understood.
+
+## Core idea
+
+Every privileged action carries a typed, machine-verifiable intent statement.
+The on-chain guard:
+1. Binds signer signatures to the typed intent (intent binding).
+2. Requires signatures to be fresh at queue time (defeats durable-nonce abuse).
+3. Imposes a 24-hour public cool-off with K-of-N veto.
+4. Rejects oracle-bound claims that disagree with live allowlisted feeds.
+5. Allows only registered action kinds with deterministic adapters.
+
+The remaining gap is the rendering path: a compromised laptop can lie about
+what the typed intent says before the signer approves it. The fix is a small
+hardware attester (about $30 of off-the-shelf parts, M5Stack Cardputer) that
+decodes intent on-device, requires a physical button press, and co-signs.
+
+## Author
+
+Uwe Cerron, Traders Guild. https://www.tradersguild.global/
+X: https://x.com/traders_guild
+
+## Documents
+
+- [Whitepaper](https://uwecerron.github.io/intent-guard/intentguard.html): Debanking the debanked. A primitive for closing the web2 attack vector in DeFi.
+- [Playground](https://uwecerron.github.io/intent-guard/playground.html): Live in-browser demo of the attester rendering, with the Drift attack reproducible as a one-click scenario.
+- [How-to](https://uwecerron.github.io/intent-guard/docs/HOWTO.html): Step-by-step for protocol teams and councils.
+- [Attester spec](https://uwecerron.github.io/intent-guard/attester/SPEC.html): Hardware attester protocol, threat model, hardware build.
+- [Source](https://github.com/uwecerron/intent-guard): Solana Anchor program, EVM Safe-compatible module, signer CLI, attester firmware reference.
+
+## License
+
+- Whitepaper: CC BY 4.0
+- Code: MIT

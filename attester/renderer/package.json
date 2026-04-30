@@ -17,7 +17,7 @@
     "vectors": "tsx src/scripts/write-vectors.ts"
   },
   "dependencies": {
-    "@noble/hashes": "^1.4.0"
+    "@noble/hashes": "^1.8.0"
   },
   "devDependencies": {
     "@types/node": "^20.12.0",
